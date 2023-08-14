@@ -1,10 +1,16 @@
+import { getAllPosts } from "@/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { posts } from "@/lib/posts"
+import { formatDate } from "@/lib/formatDate"
+// import { posts } from "@/lib/posts"
 import Image from "next/image"
 import Link from "next/link"
 
-export default function Home() {
+export default async function Home() {
+  const posts = await getAllPosts()
+
+  console.log(posts)
+
   return (
     <section>
       <Input type="text" placeholder="Search blog..." className="mb-4" />
@@ -19,8 +25,8 @@ export default function Home() {
         {posts.map((post) => (
           <Link href={`/posts/${post.id}`} key={post.id} className="bg-muted hover:bg-muted/[.75] p-2">
             <h2>{post.title}</h2>
-            <p>by: Something</p>
-            <span>{post.createdAt}</span>
+            <p>by: {post.author.username}</p>
+            <span>{formatDate(post.createdAt)}</span>
           </Link>
         ))}
       </article>
