@@ -1,10 +1,26 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { posts } from "@/lib/posts"
+import { authOptions } from "@/lib/auth"
+// import { posts } from "@/lib/posts"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
 import React from "react"
+import { notFound } from "next/navigation"
+import { findUser, getPostsByUser } from "@/actions"
+import { formatDate } from "@/lib/formatDate"
+import DeletePostButton from "@/components/delete-post-button"
 
-export default function page() {
+export default async function Page() {
+  const session: UserSession | null = await getServerSession(authOptions)
+  console.log(session?.user.id)
+
+  // todo temporarily, we have to setup route blocking for un-auth users
+  if (!session) {
+    notFound()
+  }
+
+  const posts = await getPostsByUser(session.user.id)
+
   return (
     <section>
       <Input type="text" className="mb-4" />
@@ -29,12 +45,16 @@ export default function page() {
           >
             <h2>{post.title}</h2>
             <p>by: Something</p>
-            <span>{post.createdAt}</span>
+            <span>{formatDate(post.createdAt)}</span>
             <div className="flex items-center gap-1 mt-4">
-              <Link href="/posts/update/1">
+              <Link href={`/posts/update/${post.id}`}>
                 <Button variant="outline">Edit</Button>
               </Link>
-              <Button variant="outline">Delete</Button>
+              <DeletePostButton
+                userId={session.user.id}
+                authorId={post.author.id}
+                postId={post.id}
+              />
             </div>
           </Link>
         ))}

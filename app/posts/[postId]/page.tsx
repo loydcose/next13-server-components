@@ -11,8 +11,6 @@ interface PropTypes {
 export default async function Page({ params: { postId } }: PropTypes) {
   const post = await getPost(postId)
 
-  console.log({ post })
-
   return (
     <section>
       <h1 className="mb-2 text-2xl font-bold">{post?.title}</h1>

@@ -3,6 +3,8 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import Container from "@/components/container"
+import { SessionProvider } from "next-auth/react"
+import { NextAuthProvider } from "./providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,7 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <Container>{children}</Container>
+          <NextAuthProvider>
+            <Container>{children}</Container>
+          </NextAuthProvider>
         </ThemeProvider>
       </body>
     </html>

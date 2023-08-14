@@ -1,32 +1,36 @@
 "use client"
 
-import { createPost } from "@/actions"
+import { updatePost } from "@/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { authOptions } from "@/lib/auth"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
-import { FormEvent, useState } from "react"
+import { useState, FormEvent } from "react"
+import { Post } from "@prisma/client"
 
-export default function Page() {
-  const [formData, setFormData] = useState({ title: "", body: "" })
-  const { data: session } = useSession()
+interface PropTypes {
+  post: Post
+  userId: string
+  postId: string
+}
+
+export default function Update({ post, userId, postId }: PropTypes) {
+  const [formData, setFormData] = useState({
+    title: post.title,
+    body: post.body,
+  })
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const payload = { ...formData, authorId: session!.user!.id }
-
-    const response = await createPost(payload)
+    const response = await updatePost(userId, postId, formData)
     console.log({ response })
-    // todo error because no user exist before posting the authorId
   }
 
   return (
     <section>
-      <h1 className="text-2xl mb-4 font-bold">Create new blog</h1>
-      <form action="" onSubmit={handleSubmit}>
+      <h1 className="text-2xl mb-4 font-bold">Update blog</h1>
+      <form onSubmit={handleSubmit} action="">
         <Input
           value={formData.title}
           onChange={(e) =>
@@ -54,7 +58,7 @@ export default function Page() {
               cancel
             </Button>
           </Link>
-          <Button type="submit">Save</Button>
+          <Button type="submit">Update</Button>
         </div>
       </form>
     </section>

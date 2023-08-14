@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import React, { FormEvent, useState } from "react"
+import { signIn } from "next-auth/react"
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -21,8 +22,17 @@ export default function Page() {
       console.log("Password didn't match")
       return
     }
-    const response = await createUser({ username, password })
-    console.log({ response })
+
+    try {
+      const response = await createUser({ username, password })
+      if (response) {
+        signIn(undefined, { callbackUrl: "/" })
+      } else {
+        alert("Username exist")
+      }
+    } catch (error: any) {
+      console.error(error)
+    }
   }
 
   return (
