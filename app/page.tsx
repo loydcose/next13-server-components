@@ -1,4 +1,5 @@
 import { getAllPosts } from "@/actions"
+import Searches from "@/components/searches"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { authOptions } from "@/lib/auth"
@@ -12,14 +13,12 @@ export default async function Home() {
   const posts = await getAllPosts()
   // const session = await getServerSession(authOptions)
   // console.log(session)
-
+ 
   return (
     <section>
-      <Input type="text" placeholder="Search blog..." className="mb-4" />
-      <div className="mb-4 flex items-center justify-between">
-        <Button>Filter</Button>
-        <Button>Sort</Button>
-      </div>
+      <Searches/>
+      {/* <Input type="text" placeholder="Search blog..." className="mb-4" /> */}
+      {/* <Button className="mb-4">Sort</Button> */}
 
       <h1 className="mb-4 text-2xl font-bold">Blog posts</h1>
 
