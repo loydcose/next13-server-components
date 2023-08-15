@@ -38,15 +38,16 @@ export default async function Page() {
 
       <article className="grid grid-template-columns-[repeat(auto-fit,_minmax(300px),_1fr)] gap-2">
         {posts.map((post) => (
-          <Link
-            href={`/posts/${post.id}`}
-            key={post.id}
-            className="bg-muted hover:bg-muted/[.75] p-2"
-          >
-            <h2>{post.title}</h2>
-            <p>by: Something</p>
-            <span>{formatDate(post.createdAt)}</span>
-            <div className="flex items-center gap-1 mt-4">
+          <div key={post.id} className="pb-12 bg-muted hover:bg-muted/[.75] relative">
+            <Link
+              href={`/posts/${post.id}`}
+              className="block p-4"
+            >
+              <h2>{post.title}</h2>
+              <p>by: Something</p>
+              <span>{formatDate(post.createdAt)}</span>
+            </Link>
+            <div className="flex items-center gap-1 mt-4 absolute bottom-4 inset-x-4">
               <Link href={`/posts/update/${post.id}`}>
                 <Button variant="outline">Edit</Button>
               </Link>
@@ -55,8 +56,8 @@ export default async function Page() {
                 authorId={post.author.id}
                 postId={post.id}
               />
-            </div>
-          </Link>
+              </div>
+          </div>
         ))}
       </article>
     </section>
